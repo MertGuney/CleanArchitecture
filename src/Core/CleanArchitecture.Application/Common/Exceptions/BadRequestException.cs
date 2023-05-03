@@ -1,0 +1,24 @@
+﻿namespace CleanArchitecture.Application.Common.Exceptions
+{
+    public class BadRequestException : Exception
+    {
+        public string[] Errors { get; set; }
+
+        public BadRequestException() : base()
+        {
+        }
+
+        public BadRequestException(string message) : base(message)
+        {
+        }
+
+        public BadRequestException(string message, Exception exception) : base(message, exception)
+        {
+        }
+
+        public BadRequestException(string[] errors) : base("Multiple errors occurred. See error details.")
+        {
+            Errors = errors;
+        }
+    }
+}
