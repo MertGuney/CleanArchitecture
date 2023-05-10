@@ -21,7 +21,6 @@
   <ItemGroup>
     <Folder Include="Common\Mappings\" />
     <Folder Include="DTOs\" />
-    <Folder Include="Extensions\" />
     <Folder Include="Features\" />
   </ItemGroup>
 
