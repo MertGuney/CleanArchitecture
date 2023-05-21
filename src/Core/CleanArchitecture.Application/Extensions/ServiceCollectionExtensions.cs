@@ -1,4 +1,7 @@
-﻿using FluentValidation;
+﻿using CleanArchitecture.Application.Common.Behaviours;
+using CleanArchitecture.Application.Common.Middlewares;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -11,6 +14,8 @@ namespace CleanArchitecture.Application.Extensions
             services.AddMediator();
             services.AddAutoMapper();
             services.AddValidators();
+            services.AddExceptionHandling();
+            services.AddValidationPipeline();
         }
 
         private static void AddAutoMapper(this IServiceCollection services)
@@ -24,6 +29,14 @@ namespace CleanArchitecture.Application.Extensions
         private static void AddMediator(this IServiceCollection services)
         {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        }
+        private static void AddValidationPipeline(this IServiceCollection services)
+        {
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+        }
+        private static void AddExceptionHandling(this IServiceCollection services)
+        {
+            services.AddTransient<ExceptionHandlingMiddleware>();
         }
     }
 }
