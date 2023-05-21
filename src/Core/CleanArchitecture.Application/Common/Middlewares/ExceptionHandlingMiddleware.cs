@@ -10,7 +10,7 @@ namespace CleanArchitecture.Application.Common.Middlewares
 {
     public class ExceptionHandlingMiddleware : IMiddleware
     {
-        private const int ValidationErrorCode = 100;
+        private const int ValidationErrorCode = 2000;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
         public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
         {

@@ -1,5 +1,10 @@
+using CleanArchitecture.Application.Common.Extensions;
 using CleanArchitecture.Application.Common.Middlewares;
 using CleanArchitecture.Application.Extensions;
+using NLog;
+using NLog.Web;
+
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +24,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+//app.UseMiddleware<ExceptionMiddlewareExtensions>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 
 app.UseHttpsRedirection();
 
