@@ -1,13 +1,15 @@
-﻿using CleanArchitecture.Shared;
+﻿using CleanArchitecture.Application.Common.Constraints;
+using CleanArchitecture.Shared;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
 namespace CleanArchitecture.Application.Common.Behaviours
 {
-    public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, ResponseModel<TResponse>> where TRequest : class
+    public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
+        where TResponse : ResponseModel<TResponse>
     {
-        private const int ValidationErrorCode = 4000;
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
         public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators)
@@ -15,7 +17,7 @@ namespace CleanArchitecture.Application.Common.Behaviours
             _validators = validators;
         }
 
-        public async Task<ResponseModel<TResponse>> Handle(TRequest request, RequestHandlerDelegate<ResponseModel<TResponse>> next, CancellationToken cancellationToken)
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             if (!_validators.Any())
             {
@@ -33,11 +35,11 @@ namespace CleanArchitecture.Application.Common.Behaviours
                 return await next.Invoke();
             }
 
-            var errors = failures.Select(f => new ErrorModel(ValidationErrorCode, f.PropertyName, f.ErrorMessage)).ToList();
+            var errors = failures.Select(f => new ErrorModel(ErrorCode.ValidationError, f.PropertyName, f.ErrorMessage)).ToList();
 
-            var response = await ResponseModel<TRequest>.FailureAsync(errors, StatusCodes.Status422UnprocessableEntity);
+            var response = await ResponseModel<TResponse>.FailureAsync(errors, StatusCodes.Status422UnprocessableEntity);
 
-            return await Task.FromResult(response as ResponseModel<TResponse>);
+            return await Task.FromResult(response as TResponse);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Shared;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,9 @@ using System.Text.Json;
 
 namespace CleanArchitecture.Application.Common.Behaviours
 {
-    public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull where TResponse : notnull
+    public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
+        where TResponse : ResponseModel<TResponse>
     {
         private readonly ILogger<TRequest> _logger;
         private readonly ICurrentUserService _currentUserService;
