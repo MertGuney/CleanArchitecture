@@ -1,7 +1,10 @@
-﻿using CleanArchitecture.Shared;
+﻿using CleanArchitecture.Application.Common.Exceptions;
+using CleanArchitecture.Shared;
+using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace CleanArchitecture.Application.Common.Extensions
 {
@@ -33,15 +36,26 @@ namespace CleanArchitecture.Application.Common.Extensions
         private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
             var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
             if (contextFeature is not null)
             {
-                var response = ResponseModel<NoContentModel>.Failure(ServerErrorCode, "Internal Server Error.", "", context.Response.StatusCode);
+                context.Response.StatusCode = contextFeature.Error switch
+                {
+                    NotFoundException => StatusCodes.Status404NotFound,
+                    ValidationException => StatusCodes.Status422UnprocessableEntity,
+                    _ => StatusCodes.Status500InternalServerError,
+                };
+                var response = ResponseModel<NoContentModel>.Failure(ServerErrorCode, GetTitle(exception), "Internal Server Error.", context.Response.StatusCode);
 
-                await context.Response.WriteAsync(response.ToString());
+                await context.Response.WriteAsync(JsonSerializer.Serialize(response));
             }
         }
+
+        private static string GetTitle(Exception exception)
+            => exception switch
+            {
+                CustomApplicationException applicationException => applicationException.Title,
+                _ => "Server Error"
+            };
     }
 }

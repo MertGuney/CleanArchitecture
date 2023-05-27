@@ -1,10 +1,13 @@
 ﻿using CleanArchitecture.Application.Interfaces;
+using MediatR;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace CleanArchitecture.Application.Common.Behaviours
 {
-    public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where TRequest : notnull
+    public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull where TResponse : notnull
     {
         private readonly ILogger<TRequest> _logger;
         private readonly ICurrentUserService _currentUserService;
@@ -16,19 +19,37 @@ namespace CleanArchitecture.Application.Common.Behaviours
             _currentUserService = currentUserService;
         }
 
-
-        public Task Process(TRequest request, CancellationToken cancellationToken)
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            var requestName = typeof(TRequest).Name;
-            var userId = _currentUserService.UserId ?? string.Empty;
-            string userName = string.Empty;
+            var requestNameWithGuid = $"{request.GetType().Name} [{Guid.NewGuid()}]";
 
-            if (!string.IsNullOrEmpty(userId))
+            _logger.LogInformation($"[Start] {requestNameWithGuid}");
+
+            var stopwatch = Stopwatch.StartNew();
+
+            try
             {
-                // userName = await _identityService.GetUserNameAsync(userId);
+                LogRequestWithProps(request, requestNameWithGuid);
+
+                return await next();
             }
-            _logger.LogInformation("Request: {Name} {@UserId} {@UserName} {@Request}", requestName, userId, userName, request);
-            return Task.CompletedTask;
+            finally
+            {
+                stopwatch.Stop();
+                _logger.LogInformation($"[End] {requestNameWithGuid} Execution Time = {stopwatch.ElapsedMilliseconds}ms");
+            }
+        }
+
+        private void LogRequestWithProps(TRequest request, string requestNameWithGuid)
+        {
+            try
+            {
+                _logger.LogInformation($"[PROPS] {requestNameWithGuid} {JsonSerializer.Serialize(request)}");
+            }
+            catch (NotSupportedException)
+            {
+                _logger.LogInformation($"[Serialization ERROR] {requestNameWithGuid} Could not serialize the request.");
+            }
         }
     }
 }

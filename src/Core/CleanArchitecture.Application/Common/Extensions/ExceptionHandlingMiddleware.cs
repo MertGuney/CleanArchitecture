@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace CleanArchitecture.Application.Common.Middlewares
+namespace CleanArchitecture.Application.Common.Extensions
 {
     public class ExceptionHandlingMiddleware : IMiddleware
     {
-        private const int ValidationErrorCode = 2000;
+        private const int ErrorCode = 2000;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
         public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
         {
@@ -35,11 +35,7 @@ namespace CleanArchitecture.Application.Common.Middlewares
         {
             var statusCode = GetStatusCode(exception);
 
-            List<ErrorModel> errors = new();
-            foreach (var error in GetErrors(exception))
-            {
-                errors.Add(new ErrorModel(ValidationErrorCode, GetTitle(exception), error.ErrorMessage));
-            }
+            var errors = GetErrors(exception);
 
             var response = await ResponseModel<NoContentModel>.FailureAsync(errors, statusCode);
 
@@ -52,8 +48,8 @@ namespace CleanArchitecture.Application.Common.Middlewares
         private static int GetStatusCode(Exception exception)
             => exception switch
             {
-                BadRequestException => StatusCodes.Status400BadRequest,
                 NotFoundException => StatusCodes.Status404NotFound,
+                BadRequestException => StatusCodes.Status400BadRequest,
                 ValidationException => StatusCodes.Status422UnprocessableEntity,
                 _ => StatusCodes.Status500InternalServerError
             };
@@ -61,17 +57,16 @@ namespace CleanArchitecture.Application.Common.Middlewares
         private static string GetTitle(Exception exception)
             => exception switch
             {
-                Exceptions.ApplicationException applicationException => applicationException.Title,
+                CustomApplicationException applicationException => applicationException.Title,
                 _ => "Server Error"
             };
 
-        private static IEnumerable<ValidationFailure> GetErrors(Exception exception)
+        private static List<ErrorModel> GetErrors(Exception exception)
         {
-            IEnumerable<ValidationFailure> errors = null;
-            if (exception is ValidationException validationException)
+            List<ErrorModel> errors = new()
             {
-                errors = validationException.Errors;
-            }
+                new ErrorModel(ErrorCode, GetTitle(exception), exception.Message)
+            };
             return errors;
         }
     }
