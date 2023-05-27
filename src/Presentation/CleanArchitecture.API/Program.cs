@@ -1,5 +1,4 @@
-using CleanArchitecture.Application.Common.Extensions;
-using CleanArchitecture.Infrastructure.Extensions;
+using CleanArchitecture.Application.Common.ActionFilters;
 
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
@@ -11,7 +10,15 @@ try
 
     builder.Services.AddInfrastructureLayer();
 
-    builder.Services.AddControllers();
+    builder.Services.AddPersistenceLayer(builder.Configuration);
+
+    builder.Services.AddControllers(opts =>
+    {
+        opts.Filters.Add(new ValidationFilterAttribute());
+    }).ConfigureApiBehaviorOptions(opts =>
+    {
+        opts.SuppressModelStateInvalidFilter = true;
+    });
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -28,7 +35,7 @@ try
         app.UseSwaggerUI();
     }
 
-    app.UseMiddleware<ExceptionMiddlewareExtensions>();
+    //app.UseMiddleware<ExceptionMiddlewareExtensions>();
     //app.UseMiddleware<ExceptionHandlingMiddleware>();
 
     app.UseHttpsRedirection();

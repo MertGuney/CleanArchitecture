@@ -17,6 +17,11 @@ namespace CleanArchitecture.Shared
             return new ResponseModel<T> { StatusCode = StatusCodes.Status200OK, IsSuccessful = true };
         }
 
+        public static ResponseModel<T> Success(int statusCode)
+        {
+            return new ResponseModel<T> { StatusCode = statusCode, IsSuccessful = true };
+        }
+
         public static ResponseModel<T> Success(T data, int statusCode)
         {
             return new ResponseModel<T> { Data = data, StatusCode = statusCode, IsSuccessful = true };
@@ -27,6 +32,11 @@ namespace CleanArchitecture.Shared
         public static Task<ResponseModel<T>> SuccessAsync()
         {
             return Task.FromResult(Success());
+        }
+
+        public static Task<ResponseModel<T>> SuccessAsync(int statusCode)
+        {
+            return Task.FromResult(Success(statusCode));
         }
 
         public static Task<ResponseModel<T>> SuccessAsync(T data, int statusCode)

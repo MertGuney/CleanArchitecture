@@ -1,8 +1,8 @@
-﻿using CleanArchitecture.Domain.Common.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace CleanArchitecture.Domain.Common
+namespace CleanArchitecture.Domain.Entities
 {
-    public abstract class BaseAuditableEntity : BaseEntity, IAuditableEntity
+    public class User : IdentityUser
     {
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }

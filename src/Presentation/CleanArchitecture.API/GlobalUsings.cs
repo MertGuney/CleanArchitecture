@@ -1,4 +1,5 @@
-﻿global using CleanArchitecture.Application.Common.Middlewares;
-global using CleanArchitecture.Application.Extensions;
+﻿global using CleanArchitecture.Application.Extensions;
+global using CleanArchitecture.Infrastructure.Extensions;
+global using CleanArchitecture.Persistence.Extensions;
 global using NLog;
 global using NLog.Web;

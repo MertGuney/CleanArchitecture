@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.Common.Behaviours;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +28,9 @@ namespace CleanArchitecture.Application.Extensions
 
         private static void AddValidators(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
+                    .AddFluentValidationAutoValidation()
+                    .AddFluentValidationClientsideAdapters();
         }
 
         private static void AddMediator(this IServiceCollection services)

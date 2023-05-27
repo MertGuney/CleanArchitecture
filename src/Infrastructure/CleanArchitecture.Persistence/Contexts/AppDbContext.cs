@@ -1,16 +1,13 @@
 ﻿using CleanArchitecture.Domain.Common;
 using CleanArchitecture.Domain.Common.Interfaces;
+using CleanArchitecture.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.Persistence.Contexts
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User>
     {
         private readonly IDomainEventDispatcher _dispatcher;
 

@@ -21,7 +21,7 @@
   <ItemGroup>
     <Folder Include="Common\Mappings\" />
     <Folder Include="DTOs\" />
-    <Folder Include="Features\" />
+    <Folder Include="Features\Queries\" />
   </ItemGroup>
 
 </Project>
