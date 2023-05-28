@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Interfaces;
+﻿using CleanArchitecture.Application.Interfaces.Services;
 using CleanArchitecture.Shared;
 using MediatR;
 using MediatR.Pipeline;

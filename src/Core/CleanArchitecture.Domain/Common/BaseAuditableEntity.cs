@@ -8,5 +8,16 @@ namespace CleanArchitecture.Domain.Common
         public DateTime? CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
+
+        public void AddCreator(string createdBy)
+        {
+            CreatedBy = createdBy;
+            CreatedDate = DateTime.Now;
+        }
+        public void AddLastModifier(string updatedBy)
+        {
+            UpdatedBy = updatedBy;
+            UpdatedDate = DateTime.Now;
+        }
     }
 }

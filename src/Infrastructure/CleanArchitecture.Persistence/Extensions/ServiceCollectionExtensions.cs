@@ -1,9 +1,11 @@
 ﻿using CleanArchitecture.Application.Interfaces.Repositories;
+using CleanArchitecture.Application.Interfaces.Services;
 using CleanArchitecture.Domain.Common;
 using CleanArchitecture.Domain.Common.Interfaces;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Persistence.Contexts;
 using CleanArchitecture.Persistence.Repositories;
+using CleanArchitecture.Persistence.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +19,7 @@ namespace CleanArchitecture.Persistence.Extensions
         {
             services.AddDbContext(configuration);
             services.AddIdentity();
+            services.AddServices();
             services.AddRepositories();
             services.AddEventDispatcher();
         }
@@ -35,6 +38,13 @@ namespace CleanArchitecture.Persistence.Extensions
         {
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork))
                     .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        }
+
+        private static void AddServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICodeService, CodeService>();
         }
 
         private static void AddIdentity(this IServiceCollection services)

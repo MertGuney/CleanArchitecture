@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Common\Mappings\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Features\Queries\" />
   </ItemGroup>
 

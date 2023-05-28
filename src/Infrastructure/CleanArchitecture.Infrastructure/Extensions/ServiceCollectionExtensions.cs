@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Interfaces;
+﻿using CleanArchitecture.Application.Interfaces.Services;
 using CleanArchitecture.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +13,7 @@ namespace CleanArchitecture.Infrastructure.Extensions
 
         private static void AddServices(this IServiceCollection services)
         {
+            services.AddScoped<IMailService, MailService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
         }
     }

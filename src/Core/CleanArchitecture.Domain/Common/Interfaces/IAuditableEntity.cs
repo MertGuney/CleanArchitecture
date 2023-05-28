@@ -6,5 +6,7 @@
         public DateTime? CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        void AddCreator(string createdBy);
+        void AddLastModifier(string updatedBy);
     }
 }

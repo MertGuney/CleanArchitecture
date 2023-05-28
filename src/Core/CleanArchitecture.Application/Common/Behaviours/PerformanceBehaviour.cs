@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Interfaces;
+﻿using CleanArchitecture.Application.Interfaces.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
