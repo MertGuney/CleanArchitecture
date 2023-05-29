@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Common.Exceptions;
+using CleanArchitecture.Application.DTOs.Tokens;
 using CleanArchitecture.Application.Interfaces.Services;
 using CleanArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -8,16 +9,37 @@ namespace CleanArchitecture.Persistence.Services
     public class AuthService : IAuthService
     {
         private readonly ICodeService _codeService;
-        private readonly IMailService _mailService;
+        private readonly ITokenService _tokenService;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AuthService(ICodeService codeService, IMailService mailService, UserManager<User> userManager, SignInManager<User> signInManager)
+        public AuthService(ICodeService codeService, ITokenService tokenService, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _codeService = codeService;
-            _mailService = mailService;
+            _tokenService = tokenService;
             _userManager = userManager;
             _signInManager = signInManager;
+        }
+
+        public async Task<TokenDTO> LoginAsync(string userNameOrEmail, string password)
+        {
+            User user = await _userManager.FindByNameAsync(userNameOrEmail);
+            if (user is null)
+            {
+                user = await _userManager.FindByEmailAsync(userNameOrEmail);
+                if (user is null)
+                {
+                    throw new NotFoundException("Invalid Email/UserName Or Password");
+                }
+            }
+
+            SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+            if (result.Succeeded)
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                return _tokenService.CreateAccessToken(user, userRoles);
+            }
+            throw new CustomApplicationException("Invalid Email/UserName Or Password");
         }
 
         public async Task<bool> RegisterAsync(string email, string password)

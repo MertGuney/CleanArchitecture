@@ -1,5 +1,3 @@
-using CleanArchitecture.Application.Common.ActionFilters;
-
 var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
 try
