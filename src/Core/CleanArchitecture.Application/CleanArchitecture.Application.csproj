@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Common\Mappings\" />
+    <Folder Include="Features\Commands\Users\" />
     <Folder Include="Features\Queries\" />
   </ItemGroup>
 

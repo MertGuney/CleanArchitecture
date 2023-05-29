@@ -37,7 +37,7 @@ namespace CleanArchitecture.Application.Common.Behaviours
             var innerException = exception.InnerException?.Message;
             var stackTrace = exception.StackTrace;
 
-            return new ErrorModel(ErrorCode.ServiceError, message, $"Method Name: {methodName}, Inner Exception: {innerException}, Stack Trace: {stackTrace}");
+            return new ErrorModel(ErrorCode.Service, message, $"Method Name: {methodName}, Inner Exception: {innerException}, Stack Trace: {stackTrace}");
         }
     }
 }

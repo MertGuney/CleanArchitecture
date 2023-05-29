@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.Shared;
 using MediatR;
 
-namespace CleanArchitecture.Application.Features.Commands.Users.Register
+namespace CleanArchitecture.Application.Features.Commands.Auth.Register
 {
     public class RegisterCommandRequest : IRequest<ResponseModel<NoContentModel>>
     {

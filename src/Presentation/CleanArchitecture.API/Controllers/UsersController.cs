@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Features.Commands.Users.Register;
+﻿using CleanArchitecture.Application.Features.Commands.Auth.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

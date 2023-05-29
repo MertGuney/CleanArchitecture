@@ -20,23 +20,29 @@ namespace CleanArchitecture.Persistence.Services
             _signInManager = signInManager;
         }
 
-        public async Task<bool> ForgotPasswordAsync(string email, CancellationToken cancellationToken)
+        public async Task<bool> RegisterAsync(string email, string password)
         {
-            User user = await _userManager.FindByEmailAsync(email);
-            if (user is not null)
-            {
-                var code = await _codeService.GenerateAsync(user.Id, cancellationToken);
+            var existUser = await _userManager.FindByEmailAsync(email);
+            if (existUser is not null) throw new CustomApplicationException("Exist User");
 
-                return await _mailService.SendForgotPasswordMailAsync(user.Email, user.Id, code);
-            }
-            throw new NotFoundException("User Not Found");
+            User user = new()
+            {
+                Email = email,
+                UserName = email
+            };
+
+            var result = await _userManager.CreateAsync(user, password);
+            return result.Succeeded;
         }
 
-        public async Task<bool> ForgotPasswordAsync(string email, string newPassword)
+        public async Task<bool> ResetPasswordAsync(string email, string code, string newPassword, CancellationToken cancellationToken)
         {
             User user = await _userManager.FindByEmailAsync(email);
             if (user is not null)
             {
+                var verifyCode = await _codeService.IsVerifiedAsync(user.Id, code, cancellationToken);
+                if (!verifyCode) throw new CustomApplicationException("Verification code could not be verified.");
+
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
                 IdentityResult result = await _userManager.ResetPasswordAsync(user, token, newPassword);

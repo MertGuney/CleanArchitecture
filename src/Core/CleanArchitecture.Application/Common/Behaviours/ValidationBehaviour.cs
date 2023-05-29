@@ -35,7 +35,7 @@ namespace CleanArchitecture.Application.Common.Behaviours
                 return await next.Invoke();
             }
 
-            var errors = failures.Select(f => new ErrorModel(ErrorCode.ValidationError, f.PropertyName, f.ErrorMessage)).ToList();
+            var errors = failures.Select(f => new ErrorModel(ErrorCode.Invalid, f.PropertyName, f.ErrorMessage)).ToList();
 
             var response = await ResponseModel<TResponse>.FailureAsync(errors, StatusCodes.Status422UnprocessableEntity);
 

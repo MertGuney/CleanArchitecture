@@ -10,73 +10,79 @@ namespace CleanArchitecture.Persistence.Services
     public class CodeService : ICodeService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
 
-        public CodeService(IUnitOfWork unitOfWork, UserManager<User> userManager)
+        public CodeService(IUnitOfWork unitOfWork, IMailService mailService, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
+            _mailService = mailService;
             _userManager = userManager;
         }
 
-
-        public async Task<string> GenerateAsync(string userId, CancellationToken cancellationToken)
+        public async Task<bool> SendAsync(string email, CancellationToken cancellationToken)
         {
-            var userVerificationRepository = _unitOfWork.Repository<UserVerification>();
-
-            var isExist = await userVerificationRepository.Entities.Where(x => x.UserId == userId).FirstOrDefaultAsync(cancellationToken);
-
-            var uniqueCode = await GetUniqueCodeAsync(userId, userVerificationRepository, cancellationToken);
-
-            if (isExist is null)
-            {
-                UserVerification verification = new()
-                {
-                    UserId = userId,
-                    Code = uniqueCode,
-                    ExpireDate = DateTime.Now.AddSeconds(200),
-                };
-                await userVerificationRepository.AddAsync(verification);
-            }
-            else
-            {
-                isExist.Code = uniqueCode;
-                isExist.ExpireDate = DateTime.Now.AddSeconds(200);
-                isExist.AddLastModifier(userId);
-
-                await userVerificationRepository.UpdateAsync(isExist);
-            }
-            await _unitOfWork.SaveAsync(cancellationToken);
-            return uniqueCode;
-        }
-
-        public async Task<bool> VerifyAsync(string userId, string code, CancellationToken cancellationToken)
-        {
-            User user = await _userManager.FindByIdAsync(userId);
+            User user = await _userManager.FindByEmailAsync(email);
             if (user is not null)
             {
-                var verification = _unitOfWork.Repository<UserVerification>();
-                return await verification.Entities.AnyAsync(x => x.UserId == userId && x.Code == code && x.ExpireDate <= DateTime.Now, cancellationToken);
+                var code = await GenerateAsync(user.Id, cancellationToken);
+
+                return await _mailService.SendForgotPasswordMailAsync(user.Email, user.Id, code);
             }
             throw new NotFoundException("User Not Found");
         }
 
-        private static async Task<string> GetUniqueCodeAsync(string userId, IGenericRepository<UserVerification> userVerificationRepository, CancellationToken cancellationToken)
+        public async Task<string> GenerateAsync(string userId, CancellationToken cancellationToken)
         {
-            int code = 0;
-            bool isUnique = false;
-            Random random = new();
-            while (!isUnique)
-            {
-                code = random.Next(100000, 999999);
+            var userVerificationRepository = _unitOfWork.Repository<VerificationCode>();
 
-                var isExist = await userVerificationRepository.Entities.AnyAsync(x => x.UserId == userId && x.Code == code.ToString(), cancellationToken);
-                if (!isExist)
+            Random random = new();
+            var code = random.Next(100000, 999999);
+
+            VerificationCode verification = new(code.ToString(), userId);
+
+            await userVerificationRepository.AddAsync(verification);
+
+            return await _unitOfWork.SaveAsync(cancellationToken) switch
+            {
+                > 0 => code.ToString(),
+                _ => null
+            };
+        }
+
+        public async Task<bool> VerifyAsync(string email, string code, CancellationToken cancellationToken)
+        {
+            User user = await _userManager.FindByEmailAsync(email);
+            if (user is not null)
+            {
+                var verification = _unitOfWork.Repository<VerificationCode>();
+                var userVerification = await verification.Entities.Where(x => x.UserId == user.Id && x.Value == code && x.ExpireDate <= DateTime.Now && !x.IsVerified).FirstOrDefaultAsync(cancellationToken);
+                if (userVerification is not null)
                 {
-                    isUnique = true;
-                    break;
+                    userVerification.IsVerified = true;
+                    userVerification.AddLastModifier(user.Id);
+
+                    await verification.UpdateAsync(userVerification);
+                    return await _unitOfWork.SaveAsync(cancellationToken) switch
+                    {
+                        > 0 => true,
+                        _ => false
+                    };
                 }
+                return false;
             }
-            return code.ToString();
+            throw new NotFoundException("User Not Found");
+        }
+
+        public async Task<bool> IsVerifiedAsync(string userId, string code, CancellationToken cancellationToken)
+        {
+            User user = await _userManager.FindByIdAsync(userId);
+            if (user is not null)
+            {
+                var verification = _unitOfWork.Repository<VerificationCode>();
+                return await verification.Entities.AnyAsync(x => x.UserId == userId && x.Value == code && x.IsVerified && x.UpdatedDate.Value.DayOfYear == DateTime.Now.DayOfYear, cancellationToken);
+            }
+            throw new NotFoundException("User Not Found");
         }
     }
 }
