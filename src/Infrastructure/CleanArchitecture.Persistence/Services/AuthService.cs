@@ -21,7 +21,7 @@ namespace CleanArchitecture.Persistence.Services
             _signInManager = signInManager;
         }
 
-        public async Task<TokenDTO> LoginAsync(string userNameOrEmail, string password)
+        public async Task<TokenDTO> LoginAsync(string userNameOrEmail, string password, bool rememberMe)
         {
             User user = await _userManager.FindByNameAsync(userNameOrEmail);
             if (user is null)
@@ -33,7 +33,8 @@ namespace CleanArchitecture.Persistence.Services
                 }
             }
 
-            SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+            // SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+            SignInResult result = await _signInManager.PasswordSignInAsync(user, password, rememberMe, false);
             if (result.Succeeded)
             {
                 var userRoles = await _userManager.GetRolesAsync(user);

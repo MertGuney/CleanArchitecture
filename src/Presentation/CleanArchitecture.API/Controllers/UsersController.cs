@@ -1,5 +1,4 @@
-﻿using CleanArchitecture.Application.Features.Commands.Auth.Register;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.API.Controllers
@@ -8,15 +7,8 @@ namespace CleanArchitecture.API.Controllers
     [ApiController]
     public class UsersController : BaseController
     {
-        private readonly IMediator _mediator;
-
-        public UsersController(IMediator mediator)
+        public UsersController(IMediator mediator) : base(mediator)
         {
-            _mediator = mediator;
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterCommandRequest request)
-            => ActionResultInstance(await _mediator.Send(request));
     }
 }

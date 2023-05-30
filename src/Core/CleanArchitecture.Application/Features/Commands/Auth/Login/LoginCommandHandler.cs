@@ -16,7 +16,7 @@ namespace CleanArchitecture.Application.Features.Commands.Auth.Login
 
         public async Task<ResponseModel<LoginCommandResponse>> Handle(LoginCommandRequest request, CancellationToken cancellationToken)
         {
-            TokenDTO token = await _authService.LoginAsync(request.UserNameOrEmail, request.Password);
+            TokenDTO token = await _authService.LoginAsync(request.UserNameOrEmail, request.Password, request.RememberMe);
 
             LoginCommandResponse response = new()
             {

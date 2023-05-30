@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Common.Behaviours;
+using CleanArchitecture.Application.Common.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -6,7 +7,7 @@ using MediatR.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace CleanArchitecture.Application.Extensions
+namespace CleanArchitecture.Application.Common.Extensions
 {
     public static class ServiceCollectionExtensions
     {
