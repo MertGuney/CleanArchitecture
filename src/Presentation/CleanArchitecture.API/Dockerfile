@@ -8,6 +8,11 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/Presentation/CleanArchitecture.API/CleanArchitecture.API.csproj", "src/Presentation/CleanArchitecture.API/"]
+COPY ["src/Core/CleanArchitecture.Application/CleanArchitecture.Application.csproj", "src/Core/CleanArchitecture.Application/"]
+COPY ["src/Shared/CleanArchitecture.Shared/CleanArchitecture.Shared.csproj", "src/Shared/CleanArchitecture.Shared/"]
+COPY ["src/Core/CleanArchitecture.Domain/CleanArchitecture.Domain.csproj", "src/Core/CleanArchitecture.Domain/"]
+COPY ["src/Infrastructure/CleanArchitecture.Infrastructure/CleanArchitecture.Infrastructure.csproj", "src/Infrastructure/CleanArchitecture.Infrastructure/"]
+COPY ["src/Infrastructure/CleanArchitecture.Persistence/CleanArchitecture.Persistence.csproj", "src/Infrastructure/CleanArchitecture.Persistence/"]
 RUN dotnet restore "src/Presentation/CleanArchitecture.API/CleanArchitecture.API.csproj"
 COPY . .
 WORKDIR "/src/src/Presentation/CleanArchitecture.API"

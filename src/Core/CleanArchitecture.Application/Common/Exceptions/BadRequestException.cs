@@ -2,7 +2,7 @@
 {
     public class BadRequestException : Exception
     {
-        public string[] Errors { get; set; }
+        public List<string> Errors { get; set; }
 
         public BadRequestException() : base()
         {
@@ -16,7 +16,7 @@
         {
         }
 
-        public BadRequestException(string[] errors) : base("Multiple errors occurred. See error details.")
+        public BadRequestException(List<string> errors) : base("Multiple errors occurred. See error details.")
         {
             Errors = errors;
         }
