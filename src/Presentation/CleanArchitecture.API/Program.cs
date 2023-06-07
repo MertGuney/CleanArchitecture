@@ -10,6 +10,8 @@ try
 
     builder.Services.AddPersistenceLayer(builder.Configuration);
 
+    builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
     builder.Services.AddControllers(opts =>
     {
         opts.Filters.Add(new ValidationFilterAttribute());

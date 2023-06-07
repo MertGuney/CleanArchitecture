@@ -43,7 +43,7 @@ namespace CleanArchitecture.Persistence.Services
             throw new CustomApplicationException("Invalid Email/UserName Or Password");
         }
 
-        public async Task<bool> RegisterAsync(string email, string password)
+        public async Task<bool> RegisterAsync(string email, string userName, string password)
         {
             var existUser = await _userManager.FindByEmailAsync(email);
             if (existUser is not null) throw new CustomApplicationException("Exist User");
@@ -51,7 +51,7 @@ namespace CleanArchitecture.Persistence.Services
             User user = new()
             {
                 Email = email,
-                UserName = email
+                UserName = userName
             };
 
             var result = await _userManager.CreateAsync(user, password);

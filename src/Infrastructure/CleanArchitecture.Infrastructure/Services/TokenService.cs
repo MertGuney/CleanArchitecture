@@ -14,7 +14,7 @@ namespace CleanArchitecture.Infrastructure.Services
         {
             var accessTokenExpiration = DateTime.Now.AddDays(1);
             var refreshTokenExpiration = DateTime.Now.AddYears(1);
-            var securityKey = SignService.GetSymmetricSecurityKey("");
+            var securityKey = SignService.GetSymmetricSecurityKey("securityKeysecurityKeysecurityKey");
             var audiences = new List<string>() { "audience" };
 
             SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256Signature);

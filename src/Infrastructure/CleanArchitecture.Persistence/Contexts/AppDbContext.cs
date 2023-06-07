@@ -16,6 +16,8 @@ namespace CleanArchitecture.Persistence.Contexts
             _dispatcher = dispatcher;
         }
 
+        public DbSet<VerificationCode> VerificationCodes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

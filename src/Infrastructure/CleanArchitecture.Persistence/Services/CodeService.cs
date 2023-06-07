@@ -42,6 +42,7 @@ namespace CleanArchitecture.Persistence.Services
             VerificationCode verification = new(code.ToString(), userId);
 
             await userVerificationRepository.AddAsync(verification);
+            verification.AddCreator(userId);
 
             return await _unitOfWork.SaveAsync(cancellationToken) switch
             {
