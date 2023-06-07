@@ -18,6 +18,10 @@ namespace CleanArchitecture.Application.Common.ActionFilters
                     .Select(x => new ErrorModel(ValidationErrorCode, $"Invalid Parameter", x.ErrorMessage)).ToList();
                 context.Result = new BadRequestObjectResult(await ResponseModel<NoContentModel>.FailureAsync(errors, StatusCodes.Status422UnprocessableEntity));
             }
+            else
+            {
+                await next();
+            }
         }
     }
 }
