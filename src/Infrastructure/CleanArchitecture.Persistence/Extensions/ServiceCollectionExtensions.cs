@@ -26,7 +26,7 @@ namespace CleanArchitecture.Persistence.Extensions
 
         private static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         }
 
         private static void AddEventDispatcher(this IServiceCollection services)
