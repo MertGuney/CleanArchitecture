@@ -1,8 +1,7 @@
-﻿namespace CleanArchitecture.Application.Interfaces.Services
+﻿namespace CleanArchitecture.Application.Interfaces.Services;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<bool> ResetPasswordAsync();
-        Task<bool> VerifyResetPasswordTokenAsync(string userId, string token);
-    }
+    Task<bool> ResetPasswordAsync();
+    Task<bool> VerifyResetPasswordTokenAsync(string userId, string token);
 }

@@ -1,6 +1,4 @@
-﻿using CleanArchitecture.Domain.Common;
-
-namespace CleanArchitecture.Application.Interfaces.Repositories
+﻿namespace CleanArchitecture.Application.Interfaces.Repositories
 {
     public interface IUnitOfWork : IDisposable
     {

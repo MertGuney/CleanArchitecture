@@ -1,13 +1,10 @@
-﻿using FluentValidation;
+﻿namespace CleanArchitecture.Application.Features.Commands.Verification.VerifyCode;
 
-namespace CleanArchitecture.Application.Features.Commands.Verification.VerifyCode
+public class VerifyCodeCommandValidator : AbstractValidator<VerifyCodeCommandRequest>
 {
-    public class VerifyCodeCommandValidator : AbstractValidator<VerifyCodeCommandRequest>
+    public VerifyCodeCommandValidator()
     {
-        public VerifyCodeCommandValidator()
-        {
-            RuleFor(x => x.Code).Length(6);
-            RuleFor(x => x.Email).EmailAddress();
-        }
+        RuleFor(x => x.Code).Length(6);
+        RuleFor(x => x.Email).EmailAddress();
     }
 }

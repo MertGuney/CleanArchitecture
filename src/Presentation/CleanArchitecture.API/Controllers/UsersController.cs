@@ -1,14 +1,10 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿namespace CleanArchitecture.API.Controllers;
 
-namespace CleanArchitecture.API.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class UsersController : BaseController
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : BaseController
+    public UsersController(IMediator mediator) : base(mediator)
     {
-        public UsersController(IMediator mediator) : base(mediator)
-        {
-        }
     }
 }

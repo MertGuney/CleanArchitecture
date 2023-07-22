@@ -1,12 +1,8 @@
-﻿using CleanArchitecture.Shared;
-using MediatR;
+﻿namespace CleanArchitecture.Application.Features.Commands.Auth.Login;
 
-namespace CleanArchitecture.Application.Features.Commands.Auth.Login
+public class LoginCommandRequest : IRequest<ResponseModel<LoginCommandResponse>>
 {
-    public class LoginCommandRequest : IRequest<ResponseModel<LoginCommandResponse>>
-    {
-        public bool RememberMe { get; set; }
-        public string Password { get; set; }
-        public string UserNameOrEmail { get; set; }
-    }
+    public bool RememberMe { get; set; }
+    public string Password { get; set; }
+    public string UserNameOrEmail { get; set; }
 }

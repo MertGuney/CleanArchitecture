@@ -1,45 +1,38 @@
-﻿using CleanArchitecture.Application.Common.Constraints;
-using CleanArchitecture.Shared;
-using FluentValidation;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿namespace CleanArchitecture.Application.Common.Behaviours;
 
-namespace CleanArchitecture.Application.Common.Behaviours
+public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
+    where TResponse : ResponseModel<TResponse>
 {
-    public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
-        where TResponse : ResponseModel<TResponse>
+    private readonly IEnumerable<IValidator<TRequest>> _validators;
+
+    public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators)
     {
-        private readonly IEnumerable<IValidator<TRequest>> _validators;
+        _validators = validators;
+    }
 
-        public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    {
+        if (!_validators.Any())
         {
-            _validators = validators;
+            return await next();
         }
 
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        var context = new ValidationContext<TRequest>(request);
+
+        var results = await Task.WhenAll(_validators.Select(x => x.ValidateAsync(context, cancellationToken)));
+
+        var failures = results.SelectMany(x => x.Errors).Where(x => x is not null).ToList();
+
+        if (!failures.Any())
         {
-            if (!_validators.Any())
-            {
-                return await next();
-            }
-
-            var context = new ValidationContext<TRequest>(request);
-
-            var results = await Task.WhenAll(_validators.Select(x => x.ValidateAsync(context, cancellationToken)));
-
-            var failures = results.SelectMany(x => x.Errors).Where(x => x is not null).ToList();
-
-            if (!failures.Any())
-            {
-                return await next.Invoke();
-            }
-
-            var errors = failures.Select(f => new ErrorModel(ErrorCode.Invalid, f.PropertyName, f.ErrorMessage)).ToList();
-
-            var response = await ResponseModel<TResponse>.FailureAsync(errors, StatusCodes.Status422UnprocessableEntity);
-
-            return await Task.FromResult(response as TResponse);
+            return await next.Invoke();
         }
+
+        var errors = failures.Select(f => new ErrorModel(ErrorCode.Invalid, f.PropertyName, f.ErrorMessage)).ToList();
+
+        var response = await ResponseModel<TResponse>.FailureAsync(errors, StatusCodes.Status422UnprocessableEntity);
+
+        return await Task.FromResult(response as TResponse);
     }
 }

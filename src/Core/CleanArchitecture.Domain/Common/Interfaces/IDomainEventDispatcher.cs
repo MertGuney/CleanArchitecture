@@ -1,7 +1,6 @@
-﻿namespace CleanArchitecture.Domain.Common.Interfaces
+﻿namespace CleanArchitecture.Domain.Common.Interfaces;
+
+public interface IDomainEventDispatcher
 {
-    public interface IDomainEventDispatcher
-    {
-        Task DispatchAndClearEvents(IEnumerable<BaseEntity> entitiesWithEvents);
-    }
+    Task DispatchAndClearEvents(IEnumerable<BaseEntity> entitiesWithEvents);
 }

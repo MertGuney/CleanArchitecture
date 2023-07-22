@@ -1,11 +1,7 @@
-﻿using CleanArchitecture.Application.DTOs.Tokens;
-using CleanArchitecture.Domain.Entities;
+﻿namespace CleanArchitecture.Application.Interfaces.Services;
 
-namespace CleanArchitecture.Application.Interfaces.Services
+public interface ITokenService
 {
-    public interface ITokenService
-    {
-        string CreateRefreshToken();
-        TokenDTO CreateAccessToken(User user, IList<string> userRoles);
-    }
+    string CreateRefreshToken();
+    TokenResponse CreateAccessToken(User user, IList<string> userRoles);
 }

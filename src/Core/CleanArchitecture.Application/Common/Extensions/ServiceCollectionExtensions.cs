@@ -1,62 +1,52 @@
-﻿using CleanArchitecture.Application.Common.Behaviours;
-using CleanArchitecture.Application.Common.Extensions;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using MediatR;
-using MediatR.Pipeline;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+﻿namespace CleanArchitecture.Application.Common.Extensions;
 
-namespace CleanArchitecture.Application.Common.Extensions
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static void AddApplicationLayer(this IServiceCollection services)
     {
-        public static void AddApplicationLayer(this IServiceCollection services)
-        {
-            services.AddMediator();
-            services.AddAutoMapper();
-            services.AddValidators();
-            services.AddLoggingPipelineBehaviours();
-            services.AddValidationPipelineBehaviours();
-            services.AddPerformancePipelineBehaviours();
-            services.AddExceptionHandlerPipelineBehaviours();
-        }
+        services.AddMediator();
+        services.AddAutoMapper();
+        services.AddValidators();
+        services.AddLoggingPipelineBehaviours();
+        services.AddValidationPipelineBehaviours();
+        services.AddPerformancePipelineBehaviours();
+        services.AddExceptionHandlerPipelineBehaviours();
+    }
 
-        private static void AddAutoMapper(this IServiceCollection services)
-        {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        }
+    private static void AddAutoMapper(this IServiceCollection services)
+    {
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+    }
 
-        private static void AddValidators(this IServiceCollection services)
-        {
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
-                    .AddFluentValidationAutoValidation()
-                    .AddFluentValidationClientsideAdapters();
-        }
+    private static void AddValidators(this IServiceCollection services)
+    {
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
+                .AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
+    }
 
-        private static void AddMediator(this IServiceCollection services)
-        {
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-        }
+    private static void AddMediator(this IServiceCollection services)
+    {
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+    }
 
-        private static void AddValidationPipelineBehaviours(this IServiceCollection services)
-        {
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-        }
+    private static void AddValidationPipelineBehaviours(this IServiceCollection services)
+    {
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+    }
 
-        private static void AddLoggingPipelineBehaviours(this IServiceCollection services)
-        {
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
-        }
+    private static void AddLoggingPipelineBehaviours(this IServiceCollection services)
+    {
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
+    }
 
-        private static void AddPerformancePipelineBehaviours(this IServiceCollection services)
-        {
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-        }
+    private static void AddPerformancePipelineBehaviours(this IServiceCollection services)
+    {
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
+    }
 
-        private static void AddExceptionHandlerPipelineBehaviours(this IServiceCollection services)
-        {
-            services.AddTransient(typeof(IRequestExceptionHandler<,,>), typeof(ExceptionHandlingBehaviour<,,>));
-        }
+    private static void AddExceptionHandlerPipelineBehaviours(this IServiceCollection services)
+    {
+        services.AddTransient(typeof(IRequestExceptionHandler<,,>), typeof(ExceptionHandlingBehaviour<,,>));
     }
 }

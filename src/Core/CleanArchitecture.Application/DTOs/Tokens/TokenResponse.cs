@@ -1,6 +1,6 @@
-﻿namespace CleanArchitecture.Application.Features.Commands.Auth.Login;
+﻿namespace CleanArchitecture.Application.DTOs.Tokens;
 
-public class LoginCommandResponse
+public class TokenResponse
 {
     public string AccessToken { get; set; }
     public DateTime AccessTokenExpiration { get; set; }

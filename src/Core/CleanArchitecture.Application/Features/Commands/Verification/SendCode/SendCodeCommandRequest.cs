@@ -1,10 +1,6 @@
-﻿using CleanArchitecture.Shared;
-using MediatR;
+﻿namespace CleanArchitecture.Application.Features.Commands.Verification.SendCode;
 
-namespace CleanArchitecture.Application.Features.Commands.Verification.SendCode
+public class SendCodeCommandRequest : IRequest<ResponseModel<NoContentModel>>
 {
-    public class SendCodeCommandRequest : IRequest<ResponseModel<NoContentModel>>
-    {
-        public string Email { get; set; }
-    }
+    public string Email { get; set; }
 }
