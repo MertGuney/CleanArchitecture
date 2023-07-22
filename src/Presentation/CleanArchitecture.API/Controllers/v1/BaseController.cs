@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.API.Controllers;
+﻿namespace CleanArchitecture.API.Controllers.v1;
 
 public class BaseController : ControllerBase
 {

@@ -1,7 +1,8 @@
-﻿namespace CleanArchitecture.API.Controllers;
+﻿namespace CleanArchitecture.API.Controllers.v1;
 
-[Route("api/[controller]/[action]")]
 [ApiController]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]/[action]")]
 public class CodesController : BaseController
 {
     public CodesController(IMediator mediator) : base(mediator)

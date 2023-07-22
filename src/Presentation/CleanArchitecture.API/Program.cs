@@ -12,6 +12,8 @@ try
 
     builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
+    builder.Services.ConfigureApiVersioning();
+
     builder.Services.AddControllers(opts =>
     {
         opts.Filters.Add(new ValidationFilterAttribute());
