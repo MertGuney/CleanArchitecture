@@ -1,38 +1,54 @@
-﻿using CleanArchitecture.Application.Contracts.Responses;
-using CleanArchitecture.Application.Contracts.Responses.Externals.Facebook;
-using Google.Apis.Auth;
+﻿using CleanArchitecture.Domain.Options;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace CleanArchitecture.Persistence.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly HttpClient _httpClient;
     private readonly ICodeService _codeService;
     private readonly ITokenService _tokenService;
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
 
-    public AuthService(HttpClient httpClient, ICodeService codeService, ITokenService tokenService, UserManager<User> userManager, SignInManager<User> signInManager)
+    public AuthService(ICodeService codeService, ITokenService tokenService, UserManager<User> userManager, SignInManager<User> signInManager)
     {
-        _httpClient = httpClient;
         _codeService = codeService;
         _tokenService = tokenService;
         _userManager = userManager;
         _signInManager = signInManager;
     }
 
-    //public async Task<TokenResponse> ExternalLoginAsync(User user, string provider)
-    //{
-    //    UserLoginInfo loginInfo;
-    //    switch (provider)
-    //    {
-    //        case "FACEBOOK":
-    //            loginInfo = await VerifyFacebookTokenAsync("");
-    //        default:
-    //            break;
-    //    }
-    //}
+    public async Task<TokenResponse> ExternalLoginAsync(string email, UserLoginInfo userLoginInfo)
+    {
+        User user = await _userManager.FindByLoginAsync(userLoginInfo.LoginProvider, userLoginInfo.ProviderKey);
+        bool result = false;
+        if (user is null)
+        {
+            user = await _userManager.FindByEmailAsync(email);
+            if (user is null)
+            {
+                user = new()
+                {
+                    Email = email,
+                    UserName = email
+                };
+                IdentityResult identityResult = await _userManager.CreateAsync(user);
+                result = identityResult.Succeeded;
+            }
+        }
+
+        if (result)
+        {
+            await _userManager.AddLoginAsync(user, userLoginInfo);
+            await _userManager.AddToRoleAsync(user, "Customer");
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            return _tokenService.CreateAccessToken(user, userRoles);
+        }
+        throw new Exception("Invalid external authentication");
+    }
 
     public async Task<TokenResponse> LoginAsync(string userNameOrEmail, string password, bool rememberMe)
     {
@@ -46,7 +62,6 @@ public class AuthService : IAuthService
             }
         }
 
-        // SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
         SignInResult result = await _signInManager.PasswordSignInAsync(user, password, rememberMe, false);
         if (result.Succeeded)
         {
@@ -54,30 +69,6 @@ public class AuthService : IAuthService
             return _tokenService.CreateAccessToken(user, userRoles);
         }
         throw new CustomApplicationException("Invalid Email/UserName Or Password");
-    }
-
-    public async Task<UserLoginInfo> VerifyFacebookTokenAsync(string authToken)
-    {
-        //string accessTokenResponse = await _httpClient.GetStringAsync($"https://graph.facebook.com/oauth/access_token?client_id={_configuration["ExternalLoginSettings:Facebook:Client_ID"]}&client_secret={_configuration["ExternalLoginSettings:Facebook:Client_Secret"]}&grant_type=client_credentials");
-        string accessTokenResponse = await _httpClient.GetStringAsync("");
-
-        var jsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-        FacebookAccessTokenResponse facebookAccessTokenResponse = JsonSerializer.Deserialize<FacebookAccessTokenResponse>(accessTokenResponse, jsonSerializerOptions);
-
-        string userAccessTokenValidation = await _httpClient.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={authToken}&access_token={facebookAccessTokenResponse?.AccessToken}");
-
-        FacebookUserAccessTokenValidationResponse validation = JsonSerializer.Deserialize<FacebookUserAccessTokenValidationResponse>(userAccessTokenValidation, jsonSerializerOptions);
-
-        if (validation?.Data.IsValid is not null)
-        {
-            string userInfoResponse = await _httpClient.GetStringAsync($"https://graph.facebook.com/me?fields=email,name&access_token={authToken}");
-
-            FacebookUserInfoResponse userInfo = JsonSerializer.Deserialize<FacebookUserInfoResponse>(userInfoResponse, jsonSerializerOptions);
-
-            return new UserLoginInfo("FACEBOOK", validation.Data.UserId, "FACEBOOK");
-        }
-        throw new Exception("Invalid external authentication");
     }
 
     public async Task<UserLoginInfo> VerifyGoogleTokenAsync(string idToken)

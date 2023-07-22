@@ -2,6 +2,7 @@
 global using CleanArchitecture.Application.Common.Constraints;
 global using CleanArchitecture.Application.Common.Exceptions;
 global using CleanArchitecture.Application.Common.Extensions;
+global using CleanArchitecture.Application.Contracts.Responses;
 global using CleanArchitecture.Application.Interfaces.Services;
 global using CleanArchitecture.Domain.Common;
 global using CleanArchitecture.Domain.Common.Interfaces;
@@ -13,6 +14,7 @@ global using MediatR;
 global using MediatR.Pipeline;
 global using Microsoft.AspNetCore.Diagnostics;
 global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Filters;
 global using Microsoft.AspNetCore.WebUtilities;

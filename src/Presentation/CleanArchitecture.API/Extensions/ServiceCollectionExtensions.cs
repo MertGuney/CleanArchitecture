@@ -1,4 +1,6 @@
-﻿namespace CleanArchitecture.API.Extensions;
+﻿using CleanArchitecture.Domain.Options;
+
+namespace CleanArchitecture.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
@@ -11,5 +13,10 @@ public static class ServiceCollectionExtensions
             options.ReportApiVersions = true;
             options.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader());
         });
+    }
+
+    public static void ConfigureOptions(this IServiceCollection services,IConfiguration configuration)
+    {
+        services.Configure<AuthOptions>(configuration.GetSection("Authentication"));
     }
 }
