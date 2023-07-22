@@ -9,7 +9,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>
         _dispatcher = dispatcher;
     }
 
-    public DbSet<AspNetCoreUserCode> VerificationCodes { get; set; }
+    public DbSet<AspNetCoreUserCode> AspNetCoreUserCodes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

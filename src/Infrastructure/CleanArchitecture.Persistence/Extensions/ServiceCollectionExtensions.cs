@@ -36,7 +36,7 @@ public static class ServiceCollectionExtensions
 
     private static void AddIdentity(this IServiceCollection services)
     {
-        services.AddIdentity<User, IdentityRole>(opts =>
+        services.AddIdentity<User, Role>(opts =>
         {
             opts.Password.RequiredLength = 8;
             opts.Password.RequireDigit = false;

@@ -10,11 +10,11 @@ public abstract class BaseAuditableEntity : BaseEntity, IAuditableEntity
     public void AddCreator(string createdBy)
     {
         CreatedBy = createdBy;
-        CreatedDate = DateTime.Now;
+        CreatedDate = DateTime.UtcNow;
     }
     public void AddLastModifier(string updatedBy)
     {
         UpdatedBy = updatedBy;
-        UpdatedDate = DateTime.Now;
+        UpdatedDate = DateTime.UtcNow;
     }
 }
