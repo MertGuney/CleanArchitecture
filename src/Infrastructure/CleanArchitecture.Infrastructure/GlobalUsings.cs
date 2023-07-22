@@ -1,5 +1,4 @@
-﻿global using CleanArchitecture.Application.DTOs.Tokens;
-global using CleanArchitecture.Application.Interfaces.Services;
+﻿global using CleanArchitecture.Application.Interfaces.Services;
 global using CleanArchitecture.Domain.Entities;
 global using CleanArchitecture.Infrastructure.Services;
 global using Microsoft.AspNetCore.Http;

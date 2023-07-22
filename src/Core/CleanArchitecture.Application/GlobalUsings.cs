@@ -2,7 +2,6 @@
 global using CleanArchitecture.Application.Common.Constraints;
 global using CleanArchitecture.Application.Common.Exceptions;
 global using CleanArchitecture.Application.Common.Extensions;
-global using CleanArchitecture.Application.DTOs.Tokens;
 global using CleanArchitecture.Application.Interfaces.Services;
 global using CleanArchitecture.Domain.Common;
 global using CleanArchitecture.Domain.Common.Interfaces;
