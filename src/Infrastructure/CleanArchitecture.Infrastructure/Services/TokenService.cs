@@ -1,4 +1,6 @@
-﻿namespace CleanArchitecture.Infrastructure.Services;
+﻿using CleanArchitecture.Application.Contracts.Responses;
+
+namespace CleanArchitecture.Infrastructure.Services;
 
 public class TokenService : ITokenService
 {

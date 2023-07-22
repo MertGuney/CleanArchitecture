@@ -1,4 +1,6 @@
-﻿namespace CleanArchitecture.Application.Features.Commands.Auth.Login;
+﻿using CleanArchitecture.Application.Contracts.Responses;
+
+namespace CleanArchitecture.Application.Features.Commands.Auth.Login;
 
 public class LoginCommandHandler : IRequestHandler<LoginCommandRequest, ResponseModel<LoginCommandResponse>>
 {

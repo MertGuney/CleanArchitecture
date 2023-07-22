@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Application.DTOs.Mail;
+﻿namespace CleanArchitecture.Application.Contracts.Requests;
 
 public class MailRequest
 {

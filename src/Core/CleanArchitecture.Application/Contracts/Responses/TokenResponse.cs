@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Application.DTOs.Tokens;
+﻿namespace CleanArchitecture.Application.Contracts.Responses;
 
 public class TokenResponse
 {

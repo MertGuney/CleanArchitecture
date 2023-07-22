@@ -1,4 +1,6 @@
-﻿namespace CleanArchitecture.Persistence.Services;
+﻿using CleanArchitecture.Application.Contracts.Responses;
+
+namespace CleanArchitecture.Persistence.Services;
 
 public class AuthService : IAuthService
 {
