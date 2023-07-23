@@ -1,7 +1,7 @@
 ﻿global using CleanArchitecture.Application.Common.Exceptions;
 global using CleanArchitecture.Application.Common.Extensions;
 global using CleanArchitecture.Application.Contracts.Responses;
-global using CleanArchitecture.Application.Contracts.Responses.Externals.Facebook;
+global using CleanArchitecture.Application.Contracts.Responses.Externals;
 global using CleanArchitecture.Application.Interfaces.Repositories;
 global using CleanArchitecture.Application.Interfaces.Services;
 global using CleanArchitecture.Domain.Common;
@@ -18,4 +18,3 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using System.Collections;
 global using System.Reflection;
-global using System.Text.Json;

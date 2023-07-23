@@ -3,6 +3,8 @@ global using CleanArchitecture.Application.Common.Constraints;
 global using CleanArchitecture.Application.Common.Exceptions;
 global using CleanArchitecture.Application.Common.Extensions;
 global using CleanArchitecture.Application.Contracts.Responses;
+global using CleanArchitecture.Application.Contracts.Responses.Externals;
+global using CleanArchitecture.Application.Contracts.Responses.Externals.Facebook;
 global using CleanArchitecture.Application.Interfaces.Services;
 global using CleanArchitecture.Domain.Common;
 global using CleanArchitecture.Domain.Common.Interfaces;

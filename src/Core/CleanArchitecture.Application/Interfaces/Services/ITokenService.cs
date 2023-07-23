@@ -1,6 +1,4 @@
-﻿using CleanArchitecture.Application.Contracts.Responses;
-
-namespace CleanArchitecture.Application.Interfaces.Services;
+﻿namespace CleanArchitecture.Application.Interfaces.Services;
 
 public interface ITokenService
 {

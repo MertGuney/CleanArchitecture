@@ -1,7 +1,12 @@
-﻿global using CleanArchitecture.Application.Interfaces.Services;
+﻿global using CleanArchitecture.Application.Contracts.Responses;
+global using CleanArchitecture.Application.Contracts.Responses.Externals;
+global using CleanArchitecture.Application.Contracts.Responses.Externals.Facebook;
+global using CleanArchitecture.Application.Interfaces.Services;
 global using CleanArchitecture.Domain.Entities;
+global using CleanArchitecture.Domain.Options;
 global using CleanArchitecture.Infrastructure.Services;
 global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Identity;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.IdentityModel.Tokens;
@@ -11,3 +16,4 @@ global using System.Net.Mail;
 global using System.Security.Claims;
 global using System.Security.Cryptography;
 global using System.Text;
+global using System.Text.Json;

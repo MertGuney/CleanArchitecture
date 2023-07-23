@@ -1,8 +1,4 @@
-﻿using CleanArchitecture.Domain.Options;
-using Microsoft.Extensions.Options;
-using System.Text.Json;
-
-namespace CleanArchitecture.Persistence.Services;
+﻿namespace CleanArchitecture.Persistence.Services;
 
 public class AuthService : IAuthService
 {
@@ -71,7 +67,7 @@ public class AuthService : IAuthService
         throw new CustomApplicationException("Invalid Email/UserName Or Password");
     }
 
-    public async Task<UserLoginInfo> VerifyGoogleTokenAsync(string idToken)
+    public async Task<ExternalVerifyTokenResponse> VerifyGoogleTokenAsync(string idToken)
     {
         try
         {
@@ -85,7 +81,9 @@ public class AuthService : IAuthService
             if (payload is null)
                 throw new Exception("Invalid external authentication");
 
-            return new UserLoginInfo("GOOGLE", payload.Subject, "GOOGLE");
+            var userLoginInfo = new UserLoginInfo("GOOGLE", payload.Subject, "GOOGLE");
+
+            return new ExternalVerifyTokenResponse() { Name = payload.Name, Email = payload.Email, LoginInfo = userLoginInfo };
         }
         catch (Exception)
         {

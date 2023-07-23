@@ -1,10 +1,9 @@
-﻿namespace CleanArchitecture.Application.Interfaces.Repositories
+﻿namespace CleanArchitecture.Application.Interfaces.Repositories;
+
+public interface IUnitOfWork : IDisposable
 {
-    public interface IUnitOfWork : IDisposable
-    {
-        IGenericRepository<T> Repository<T>() where T : BaseAuditableEntity;
-        Task<int> SaveAsync(CancellationToken cancellationToken);
-        Task<int> SaveAndRemoveCacheAsync(CancellationToken cancellationToken, params string[] cacheKeys);
-        Task Rollback();
-    }
+    IGenericRepository<T> Repository<T>() where T : BaseAuditableEntity;
+    Task<int> SaveAsync(CancellationToken cancellationToken);
+    Task<int> SaveAndRemoveCacheAsync(CancellationToken cancellationToken, params string[] cacheKeys);
+    Task Rollback();
 }

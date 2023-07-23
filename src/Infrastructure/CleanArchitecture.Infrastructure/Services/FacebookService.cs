@@ -1,9 +1,4 @@
-﻿using CleanArchitecture.Application.Contracts.Responses.Externals.Facebook;
-using CleanArchitecture.Domain.Options;
-using Microsoft.AspNetCore.Identity;
-using System.Text.Json;
-
-namespace CleanArchitecture.Infrastructure.Services;
+﻿namespace CleanArchitecture.Infrastructure.Services;
 
 public class FacebookService : IFacebookService
 {
@@ -16,7 +11,7 @@ public class FacebookService : IFacebookService
         _authOptions = authOptions;
     }
 
-    public async Task<UserLoginInfo> VerifyTokenAsync(string authToken)
+    public async Task<ExternalVerifyTokenResponse> VerifyTokenAsync(string authToken)
     {
         var jsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
@@ -30,7 +25,9 @@ public class FacebookService : IFacebookService
 
         if (validation?.Data.IsValid is not null)
         {
-            return new UserLoginInfo("FACEBOOK", validation.Data.UserId, "FACEBOOK");
+            var userLoginInfo = new UserLoginInfo("FACEBOOK", validation.Data.UserId, "FACEBOOK");
+            var userInfo = await UserInfoAsync(authToken);
+            return new ExternalVerifyTokenResponse() { Name = userInfo.Name, Email = userInfo.Email, LoginInfo = userLoginInfo };
         }
         throw new Exception("Invalid external authentication");
     }

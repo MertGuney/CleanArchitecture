@@ -1,6 +1,7 @@
 ﻿global using CleanArchitecture.API.Extensions;
 global using CleanArchitecture.Application.Common.ActionFilters;
 global using CleanArchitecture.Application.Common.Extensions;
+global using CleanArchitecture.Application.Features.Commands.Auth.ExternalLogin;
 global using CleanArchitecture.Application.Features.Commands.Auth.Login;
 global using CleanArchitecture.Application.Features.Commands.Auth.Register;
 global using CleanArchitecture.Application.Features.Commands.Auth.ResetPassword;
