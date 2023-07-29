@@ -23,7 +23,7 @@ public class MailService : IMailService
     {
         try
         {
-            var smtpClient = new SmtpClient("host", 25)
+            SmtpClient smtpClient = new("host", 25)
             {
                 EnableSsl = false,
                 UseDefaultCredentials = false,

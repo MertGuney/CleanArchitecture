@@ -29,7 +29,6 @@ public class TokenService : ITokenService
             RefreshToken = CreateRefreshToken(),
             RefreshTokenExpiration = refreshTokenExpiration,
         };
-
     }
 
     public string CreateRefreshToken()
