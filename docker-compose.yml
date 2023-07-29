@@ -3,6 +3,7 @@ version: '3.4'
 services:
   cleanarchitecture.api:
     image: ${DOCKER_REGISTRY-}cleanarchitectureapi
+    container_name: cleanarchitecture
     build:
       context: .
       dockerfile: src/Presentation/CleanArchitecture.API/Dockerfile
