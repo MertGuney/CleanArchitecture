@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace CleanArchitecture.Shared
+﻿namespace CleanArchitecture.Shared
 {
     public class ResponseModel<T>
     {
@@ -14,7 +12,7 @@ namespace CleanArchitecture.Shared
         #region Sync
         public static ResponseModel<T> Success()
         {
-            return new ResponseModel<T> { StatusCode = StatusCodes.Status200OK, IsSuccessful = true };
+            return new ResponseModel<T> { StatusCode = 200, IsSuccessful = true };
         }
 
         public static ResponseModel<T> Success(int statusCode)
@@ -24,7 +22,7 @@ namespace CleanArchitecture.Shared
 
         public static ResponseModel<T> Success(T data)
         {
-            return new ResponseModel<T> { Data = data, StatusCode = StatusCodes.Status200OK, IsSuccessful = true };
+            return new ResponseModel<T> { Data = data, StatusCode = 200, IsSuccessful = true };
         }
 
         public static ResponseModel<T> Success(T data, int statusCode)
