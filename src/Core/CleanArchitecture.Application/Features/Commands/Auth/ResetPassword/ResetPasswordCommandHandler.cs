@@ -13,6 +13,6 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommandR
     {
         return await _authService.ResetPasswordAsync(request.Email, request.Code, request.NewPassword, cancellationToken)
             ? await ResponseModel<NoContentModel>.SuccessAsync(StatusCodes.Status204NoContent)
-            : await ResponseModel<NoContentModel>.FailureAsync(ErrorCode.ChangePassword, "Change Password Error", "An error occurred while changing the password.", StatusCodes.Status500InternalServerError);
+            : await ResponseModel<NoContentModel>.FailureAsync(FailureTypes.CHANGE_PASSWORD_FAILED, "Change Password Error", "An error occurred while changing the password.", StatusCodes.Status500InternalServerError);
     }
 }

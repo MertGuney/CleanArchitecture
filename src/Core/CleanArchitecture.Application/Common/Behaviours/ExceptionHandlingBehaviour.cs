@@ -30,6 +30,6 @@ public class ExceptionHandlingBehaviour<TRequest, TResponse, TException> : IRequ
         var innerException = exception.InnerException?.Message;
         var stackTrace = exception.StackTrace;
 
-        return new ErrorModel(ErrorCode.Service, message, $"Method Name: {methodName}, Inner Exception: {innerException}, Stack Trace: {stackTrace}");
+        return new ErrorModel(FailureTypes.APPLICATION_EXCEPTION, message, $"Method Name: {methodName}, Inner Exception: {innerException}, Stack Trace: {stackTrace}");
     }
 }

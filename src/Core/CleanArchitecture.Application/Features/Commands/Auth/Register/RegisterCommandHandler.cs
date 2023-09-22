@@ -13,6 +13,10 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommandRequest, Re
     {
         return await _authService.RegisterAsync(request.Email, request.UserName, request.Password)
             ? await ResponseModel<NoContentModel>.SuccessAsync(StatusCodes.Status201Created)
-            : await ResponseModel<NoContentModel>.FailureAsync(ErrorCode.Register, "Register Error.", "An error occurred while user registering the user.", StatusCodes.Status500InternalServerError);
+            : await ResponseModel<NoContentModel>
+                .FailureAsync(FailureTypes.REGISTERED_USER,
+                "Register Error.",
+                "An error occurred while user registering the user.",
+                StatusCodes.Status500InternalServerError);
     }
 }

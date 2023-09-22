@@ -29,7 +29,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
             return await next.Invoke();
         }
 
-        var errors = failures.Select(f => new ErrorModel(ErrorCode.Invalid, f.PropertyName, f.ErrorMessage)).ToList();
+        var errors = failures.Select(f => new ErrorModel(FailureTypes.VALIDATION_EXCEPTION, f.PropertyName, f.ErrorMessage)).ToList();
 
         var response = await ResponseModel<TResponse>.FailureAsync(errors, StatusCodes.Status422UnprocessableEntity);
 

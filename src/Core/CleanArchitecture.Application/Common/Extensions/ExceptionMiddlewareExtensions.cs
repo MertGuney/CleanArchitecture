@@ -2,7 +2,6 @@
 
 public class ExceptionMiddlewareExtensions
 {
-    private const int ServerErrorCode = 1000;
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionMiddlewareExtensions> _logger;
 
@@ -37,7 +36,7 @@ public class ExceptionMiddlewareExtensions
                 ValidationException => StatusCodes.Status422UnprocessableEntity,
                 _ => StatusCodes.Status500InternalServerError,
             };
-            var response = ResponseModel<NoContentModel>.Failure(ServerErrorCode, GetTitle(exception), "Internal Server Error.", context.Response.StatusCode);
+            var response = ResponseModel<NoContentModel>.Failure(FailureTypes.APPLICATION_EXCEPTION, GetTitle(exception), "Internal Server Error.", context.Response.StatusCode);
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }

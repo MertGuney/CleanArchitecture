@@ -9,7 +9,7 @@ global using CleanArchitecture.Application.Features.Commands.Verification.SendCo
 global using CleanArchitecture.Application.Features.Commands.Verification.VerifyCode;
 global using CleanArchitecture.Infrastructure.Extensions;
 global using CleanArchitecture.Persistence.Extensions;
-global using CleanArchitecture.Shared;
+global using CleanArchitecture.Shared.Models;
 global using MediatR;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Versioning;

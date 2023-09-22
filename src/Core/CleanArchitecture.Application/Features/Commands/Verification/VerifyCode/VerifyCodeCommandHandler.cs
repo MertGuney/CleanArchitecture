@@ -13,6 +13,6 @@ public class VerifyCodeCommandHandler : IRequestHandler<VerifyCodeCommandRequest
     {
         return await _codeService.VerifyAsync(request.Email, request.Code, cancellationToken)
             ? await ResponseModel<NoContentModel>.SuccessAsync()
-            : await ResponseModel<NoContentModel>.FailureAsync(ErrorCode.VerifyValidationCode, "Verify Validation Code Error", "An error occurred while validating the code.", StatusCodes.Status500InternalServerError);
+            : await ResponseModel<NoContentModel>.FailureAsync(FailureTypes.UNVERIFIED_CODE, "Verify Validation Code Error", "An error occurred while validating the code.", StatusCodes.Status500InternalServerError);
     }
 }

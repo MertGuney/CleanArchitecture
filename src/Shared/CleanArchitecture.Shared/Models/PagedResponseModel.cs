@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchitecture.Shared;
+namespace CleanArchitecture.Shared.Models;
 
 public class PagedResponseModel<T> : ResponseModel<T>
 {

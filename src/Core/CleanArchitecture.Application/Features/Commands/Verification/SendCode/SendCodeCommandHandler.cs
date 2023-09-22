@@ -13,6 +13,6 @@ public class SendCodeCommandHandler : IRequestHandler<SendCodeCommandRequest, Re
     {
         return await _codeService.SendAsync(request.Email, cancellationToken)
             ? await ResponseModel<NoContentModel>.SuccessAsync()
-            : await ResponseModel<NoContentModel>.FailureAsync(ErrorCode.SendValidationCode, "Validation Code Error", "An error occurred while sending code.", StatusCodes.Status500InternalServerError);
+            : await ResponseModel<NoContentModel>.FailureAsync(FailureTypes.INVALID_CODE, "Validation Code Error", "An error occurred while sending code.", StatusCodes.Status500InternalServerError);
     }
 }
