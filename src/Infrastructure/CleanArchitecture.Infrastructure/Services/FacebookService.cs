@@ -3,9 +3,9 @@
 public class FacebookService : IFacebookService
 {
     private readonly HttpClient _httpClient;
-    private readonly AuthOptions _authOptions;
+    private readonly AuthOption _authOptions;
 
-    public FacebookService(HttpClient httpClient, AuthOptions authOptions)
+    public FacebookService(HttpClient httpClient, AuthOption authOptions)
     {
         _httpClient = httpClient;
         _authOptions = authOptions;

@@ -17,6 +17,6 @@ public static class ServiceCollectionExtensions
 
     public static void ConfigureOptions(this IServiceCollection services,IConfiguration configuration)
     {
-        services.Configure<AuthOptions>(configuration.GetSection("Authentication"));
+        services.Configure<AuthOption>(configuration.GetSection("Authentication"));
     }
 }

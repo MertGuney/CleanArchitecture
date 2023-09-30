@@ -1,5 +1,4 @@
 ﻿global using CleanArchitecture.Application.Common.Behaviours;
-global using CleanArchitecture.Application.Common.Constraints;
 global using CleanArchitecture.Application.Common.Exceptions;
 global using CleanArchitecture.Application.Common.Extensions;
 global using CleanArchitecture.Application.Contracts.Responses;
@@ -26,5 +25,6 @@ global using Microsoft.Extensions.Logging;
 global using System.Diagnostics;
 global using System.Globalization;
 global using System.Reflection;
+global using System.Security.Claims;
 global using System.Text;
 global using System.Text.Json;
