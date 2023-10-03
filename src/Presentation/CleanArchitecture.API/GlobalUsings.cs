@@ -7,6 +7,7 @@ global using CleanArchitecture.Application.Features.Commands.Auth.Register;
 global using CleanArchitecture.Application.Features.Commands.Auth.ResetPassword;
 global using CleanArchitecture.Application.Features.Commands.Verification.SendCode;
 global using CleanArchitecture.Application.Features.Commands.Verification.VerifyCode;
+global using CleanArchitecture.Domain.Options;
 global using CleanArchitecture.Infrastructure.Extensions;
 global using CleanArchitecture.Persistence.Extensions;
 global using CleanArchitecture.Shared.Models;

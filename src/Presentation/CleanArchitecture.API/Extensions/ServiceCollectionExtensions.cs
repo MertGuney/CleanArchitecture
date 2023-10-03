@@ -1,6 +1,4 @@
-﻿using CleanArchitecture.Domain.Options;
-
-namespace CleanArchitecture.API.Extensions;
+﻿namespace CleanArchitecture.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
@@ -15,7 +13,7 @@ public static class ServiceCollectionExtensions
         });
     }
 
-    public static void ConfigureOptions(this IServiceCollection services,IConfiguration configuration)
+    public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<AuthOption>(configuration.GetSection("Authentication"));
     }
